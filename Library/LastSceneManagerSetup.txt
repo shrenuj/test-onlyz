@@ -1,0 +1,4 @@
+sceneSetups:
+- path: Assets/ColorSwitchTemplate/ColorSwitch_Scenes/_2_GameSceneOne.unity
+  isLoaded: 1
+  isActive: 1
