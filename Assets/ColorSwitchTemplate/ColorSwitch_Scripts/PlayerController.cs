@@ -36,6 +36,7 @@ public class PlayerController : MonoBehaviour
     private float buttonCount = 1.5f;                   //length to hold the U and I keys to turn player Invincible(for testing out in the real world) ;-)
     private Animator pAnimator;                         //Ref to player animator.  We play a wiggly anim when player jumps upward.
     private Canvas endGameCanvas;                       //Ref to EndGameCanvas that brings up scores and restart/home buttons
+    public bool isleft;                            //Select this to be Invincible
 
     // Use this for pre-initialization
     void Awake()
@@ -79,10 +80,80 @@ public class PlayerController : MonoBehaviour
     {
         //this will be the input for Mobile,Web, and Standalone seeing as mobile will count a mouse click as emulated tap
         //this saves us time because for a simple game i feel its overkill to use Input.Touches
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         if (Input.GetMouseButtonDown(0))
         {
-            //if we haven't clicked anywhere yet, when we do the player will be activated
-            if (!playerActivated)
+            if (!isleft) { 
+
+            if (Input.mousePosition.x > Screen.width / 2) {
+
+
+                //if we haven't clicked anywhere yet, when we do the player will be activated
+                if (!playerActivated)
+                {
+                    playerActivated = true;
+                }
+                if (playerActivated && !endGameCanvas.enabled)
+                {
+                    //if we are alive and jumping turn the gravity back on
+                    playerRB.useGravity = true;
+                    //play jump animation when "Jumping"
+                    pAnimator.SetTrigger("Jump");
+                    //add our force to the player rigidbody... again... these vars were set in inspector
+                    playerRB.AddForce(Vector3.up * upwardForce, upwardForceType);
+                }
+            }
+
+            //if we hold u and i in any version with a keyboard we wont die!  We can cheat! lol
+            if (Input.GetKey(KeyCode.U) && Input.GetKey(KeyCode.I))
+            {
+                //buttonCount decrements from initial val of 1.5
+                buttonCount -= Time.deltaTime;
+                //if it falls below zero we will run our cheating method
+                if (buttonCount < 0)
+                {
+                    //cheat method
+                    DebugMode();
+                    //set count back to 1.5 so we can turn it off.
+                    buttonCount = 1.5f;
+                }
+            }
+            else
+            {
+                //else if the player did not get to the full count, then reset the time. 
+                buttonCount = 1.5f;
+            } }
+        }
+    
+
+
+
+
+
+    
+
+        if (Input.GetMouseButtonDown(0))
+        {
+            if (isleft)
+            {
+                if (Input.mousePosition.x < Screen.width / 2) {
+
+
+                //if we haven't clicked anywhere yet, when we do the player will be activated
+                if (!playerActivated)
             {
                 playerActivated = true;
             }
@@ -93,7 +164,7 @@ public class PlayerController : MonoBehaviour
                 //play jump animation when "Jumping"
                 pAnimator.SetTrigger("Jump");
                 //add our force to the player rigidbody... again... these vars were set in inspector
-                playerRB.AddForce(Vector3.up * upwardForce, upwardForceType);
+                playerRB.AddForce(Vector3.up* upwardForce, upwardForceType);
             }
         }
 
@@ -103,12 +174,12 @@ public class PlayerController : MonoBehaviour
             //buttonCount decrements from initial val of 1.5
             buttonCount -= Time.deltaTime;
             //if it falls below zero we will run our cheating method
-            if (buttonCount < 0)
+            if (buttonCount< 0)
             {
                 //cheat method
                 DebugMode();
-                //set count back to 1.5 so we can turn it off.
-                buttonCount = 1.5f;
+//set count back to 1.5 so we can turn it off.
+buttonCount = 1.5f;
             }
         }
         else
@@ -116,13 +187,43 @@ public class PlayerController : MonoBehaviour
             //else if the player did not get to the full count, then reset the time. 
             buttonCount = 1.5f;
         }
+        }
+
+        }
+
 
     }
 
-    /// <summary>
-    /// Simple Method that makes us invincible(re-enables testing mode boolean)
-    /// </summary>
-    public void DebugMode()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/// <summary>
+/// Simple Method that makes us invincible(re-enables testing mode boolean)
+/// </summary>
+public void DebugMode()
     {
         //change the value of the boolean
         testingMode = !testingMode;
