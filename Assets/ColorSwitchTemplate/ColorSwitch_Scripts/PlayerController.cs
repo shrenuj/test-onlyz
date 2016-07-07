@@ -66,6 +66,7 @@ public class PlayerController : MonoBehaviour
     // Use this for initialization
     void Start()
     {
+        Input.multiTouchEnabled = true;
         //use mainCamera reference to get the Chromatic Abberation and Camera Shake References setup;
         chromo = mainCam.GetComponent<ChromaticAberration>();
 
@@ -84,139 +85,71 @@ public class PlayerController : MonoBehaviour
 
 
 
-
-
-
-
-
-
-
-
-
-
-        if (Input.GetMouseButtonDown(0))
+        if (Input.touchCount > 0)
         {
-            if (!isleft) { 
-
-            if (Input.mousePosition.x > Screen.width / 2) {
-
-
-                //if we haven't clicked anywhere yet, when we do the player will be activated
-                if (!playerActivated)
+            
+            foreach (Touch touch in Input.touches)
+            {
+                if (touch.phase == TouchPhase.Began)
                 {
-                    playerActivated = true;
+                    if (touch.position.x < Screen.width / 2)
+                    {
+
+
+                        if (isleft)
+                        {
+
+
+                            if (!playerActivated)
+                            {
+                                playerActivated = true;
+                            }
+                            if (playerActivated && !endGameCanvas.enabled)
+                            {
+                                //if we are alive and jumping turn the gravity back on
+                                playerRB.useGravity = true;
+                                //play jump animation when "Jumping"
+                                pAnimator.SetTrigger("Jump");
+                                //add our force to the player rigidbody... again... these vars were set in inspector
+                                playerRB.AddForce(Vector3.up * upwardForce, upwardForceType);
+                            }
+                        }
+                    }
+                    if (touch.position.x > Screen.width / 2)
+                        {
+
+                            if (!isleft)
+                            {
+
+
+                                if (!playerActivated)
+                                {
+                                    playerActivated = true;
+                                }
+                                if (playerActivated && !endGameCanvas.enabled)
+                                {
+                                    //if we are alive and jumping turn the gravity back on
+                                    playerRB.useGravity = true;
+                                    //play jump animation when "Jumping"
+                                    pAnimator.SetTrigger("Jump");
+                                    //add our force to the player rigidbody... again... these vars were set in inspector
+                                    playerRB.AddForce(Vector3.up * upwardForce, upwardForceType);
+                                }
+                            }
+                        }
+                    
                 }
-                if (playerActivated && !endGameCanvas.enabled)
-                {
-                    //if we are alive and jumping turn the gravity back on
-                    playerRB.useGravity = true;
-                    //play jump animation when "Jumping"
-                    pAnimator.SetTrigger("Jump");
-                    //add our force to the player rigidbody... again... these vars were set in inspector
-                    playerRB.AddForce(Vector3.up * upwardForce, upwardForceType);
-                }
-            }
-
-            //if we hold u and i in any version with a keyboard we wont die!  We can cheat! lol
-            if (Input.GetKey(KeyCode.U) && Input.GetKey(KeyCode.I))
-            {
-                //buttonCount decrements from initial val of 1.5
-                buttonCount -= Time.deltaTime;
-                //if it falls below zero we will run our cheating method
-                if (buttonCount < 0)
-                {
-                    //cheat method
-                    DebugMode();
-                    //set count back to 1.5 so we can turn it off.
-                    buttonCount = 1.5f;
-                }
-            }
-            else
-            {
-                //else if the player did not get to the full count, then reset the time. 
-                buttonCount = 1.5f;
-            } }
-        }
-    
-
-
-
-
-
-    
-
-        if (Input.GetMouseButtonDown(0))
-        {
-            if (isleft)
-            {
-                if (Input.mousePosition.x < Screen.width / 2) {
-
-
-                //if we haven't clicked anywhere yet, when we do the player will be activated
-                if (!playerActivated)
-            {
-                playerActivated = true;
-            }
-            if (playerActivated && !endGameCanvas.enabled)
-            {
-                //if we are alive and jumping turn the gravity back on
-                playerRB.useGravity = true;
-                //play jump animation when "Jumping"
-                pAnimator.SetTrigger("Jump");
-                //add our force to the player rigidbody... again... these vars were set in inspector
-                playerRB.AddForce(Vector3.up* upwardForce, upwardForceType);
             }
         }
 
-        //if we hold u and i in any version with a keyboard we wont die!  We can cheat! lol
-        if (Input.GetKey(KeyCode.U) && Input.GetKey(KeyCode.I))
-        {
-            //buttonCount decrements from initial val of 1.5
-            buttonCount -= Time.deltaTime;
-            //if it falls below zero we will run our cheating method
-            if (buttonCount< 0)
-            {
-                //cheat method
-                DebugMode();
-//set count back to 1.5 so we can turn it off.
-buttonCount = 1.5f;
-            }
-        }
-        else
-        {
-            //else if the player did not get to the full count, then reset the time. 
-            buttonCount = 1.5f;
-        }
-        }
 
-        }
 
 
     }
+    
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    
 
 
 
